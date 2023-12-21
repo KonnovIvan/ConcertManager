@@ -103,38 +103,19 @@ class ConcertManager {
         return null;
     }
 
-    public void buyTicket(int concertId, int clientId) {
-        Concert concert = getConcertById(concertId);
-        Client client = getClientById(clientId);
-
+    public void buyTicket(Concert concert, Client client) {
         if (concert != null && client != null) {
             Ticket ticket = new Ticket(concert, client);
             client.buyTicket(ticket);
             System.out.println("Ticket purchased successfully for concert: " + concert.getName());
         } else {
-            System.out.println("Invalid concert or client ID. Please try again.");
+            System.out.println("Invalid concert or client. Please try again.");
         }
     }
 
-    @Override
-    public String toString() {
-        return "ConcertManager{" +
-                "concerts=" + concerts +
-                ", artists=" + artists +
-                ", clients=" + clients +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ConcertManager that = (ConcertManager) o;
-        return Objects.equals(concerts, that.concerts) && Objects.equals(artists, that.artists) && Objects.equals(clients, that.clients);
-    }
 
 
-//Для заданої структури класів зробити сервісні методи (не менше трьох) для роботи
+    //Для заданої структури класів зробити сервісні методи (не менше трьох) для роботи
 // з колекціями відповідних об'єктів.
 //Обов'язково використати інтерфейси Comparable та Comparator.
 //Аналогічні методи написани з використанням Stream API.
@@ -153,14 +134,26 @@ class ConcertManager {
         clients.sort(clientComparator);
     }
 
-    //(Stream API)
     public List<Concert> filterConcertsByGenre(String genre) {
-        return concerts.stream()
-                .filter(concert -> concert.getArtists().stream()
-                        .anyMatch(artist -> artist.getGenre().equalsIgnoreCase(genre)))
-                .collect(Collectors.toList());
-    }
+        List<Concert> filteredConcerts = new ArrayList<>();
 
+        for (Concert concert : concerts) {
+            boolean hasMatchingGenre = false;
+
+            for (Artist artist : concert.getArtists()) {
+                if (artist.getGenre().equalsIgnoreCase(genre)) {
+                    hasMatchingGenre = true;
+                    break;
+                }
+            }
+
+            if (hasMatchingGenre) {
+                filteredConcerts.add(concert);
+            }
+        }
+
+        return filteredConcerts;
+    }
     // (Stream API)
     public List<Artist> getArtistsByGenre(String genre) {
         return artists.stream()

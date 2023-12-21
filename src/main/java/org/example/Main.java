@@ -1,6 +1,8 @@
 package org.example;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.validation.ValidationException;
 import java.util.List;
 
@@ -10,15 +12,17 @@ public class Main {
 
         Concert concert1 = new Concert("Rock Night", "2023-01-15 20:00", "City Hall");
 
+
         Artist artist1 = new Artist.ArtistBuilder()
                 .id()
-                .concert()
+                .concert(concert1)
                 .name("The Rockers")
                 .genre("Rock")
                 .build();
 
         System.out.println("=======LAB3=========");
-
+        System.out.println(artist1);
+        System.out.println("=======LAB3=========");
         // Серіалізація в TXT
         Serializer txtSerializer = new TxtSerializer();
         String txtSerialized = txtSerializer.serialize(artist1);
@@ -34,8 +38,15 @@ public class Main {
         System.out.println("Serialized Data: " + txtSerialized);
         System.out.println("Deserialized Artist: " + txtDeserialized);
         System.out.println("\n =================================");
+        System.out.println("JSSSOOOOOOOOOONNNNNNNNN");
+        JsonSerializer jsonSerializer = new JsonSerializer(new ObjectMapper());
 
-        artist1.addConcert(concert1);
+        String jsonSerialized = jsonSerializer.serialize(artist1);
+        System.out.println("Serialized Artist (JSON): " + jsonSerialized);
+        jsonSerializer.saveToFile(artist1,"artist.json");
+
+        Artist jsonDeserializedArtist = (Artist) jsonSerializer.loadFromFile("artist.json",artist1);
+        System.out.println("Deserialized Artist: " + jsonDeserializedArtist);
         concert1.addArtist(artist1);
 
 
@@ -46,12 +57,11 @@ public class Main {
 
         Artist artist2 = new Artist.ArtistBuilder()
                 .id()
-                .concert()
+                .concert(concert2)
                 .name("Jazz Ensemble")
                 .genre("Jazz")
                 .build();
 
-        artist2.addConcert(concert2);
         concert2.addArtist(artist2);
 
         concertManager.addConcert(concert1);
@@ -70,8 +80,8 @@ public class Main {
         concertManager.displayConcerts();
         concertManager.displayArtists();
 
-        concertManager.buyTicket(1, 1);
-        concertManager.buyTicket(2, 2);
+        concertManager.buyTicket(concert1, client1);
+        concertManager.buyTicket(concert2, client2);
 
         concertManager.displayClients();
 

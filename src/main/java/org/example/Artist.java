@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class Artist  {
+public class Artist {
     private static int artistIdCounter = 1;
 
     private int artistId;
@@ -56,7 +56,7 @@ public class Artist  {
                 "artistId=" + artistId +
                 ", name='" + name + '\'' +
                 ", genre='" + genre + '\'' +
-                ", concerts=" + concerts+
+                ", concerts=" + concerts +
                 '}';
     }
 
@@ -65,52 +65,51 @@ public class Artist  {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Artist artist = (Artist) o;
-        return artistId == artist.artistId && Objects.equals(name, artist.name) && Objects.equals(genre, artist.genre) && Objects.equals(concerts, artist.concerts);
+        return Objects.equals(name, artist.name) && Objects.equals(genre, artist.genre);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name, genre);
     }
-    public void addConcert(Concert concert) {
-        concerts.add(concert);
-    }
 
-    public static class ArtistBuilder{
+    public Artist() {
+    }
+    public static class ArtistBuilder {
         private static int artistIdCounter = 1;
         private int artistId;
         private String name;
         private String genre;
-        private List<Concert> concerts;
+        private List<Concert> concerts = new ArrayList<>();
 
-        public Artist.ArtistBuilder id(){
+        public Artist.ArtistBuilder id() {
             artistId = artistIdCounter++;
             return this;
         }
 
-        public Artist.ArtistBuilder name(String name){
+        public Artist.ArtistBuilder name(String name) {
             this.name = name;
             return this;
         }
 
-        public Artist.ArtistBuilder genre(String genre){
+        public Artist.ArtistBuilder genre(String genre) {
             this.genre = genre;
             return this;
         }
 
-        public Artist.ArtistBuilder concert(){
-            this.concerts = new ArrayList<>();
+        public Artist.ArtistBuilder concert(Concert concert) {
+            this.concerts.add(concert);
             return this;
         }
 
         public Artist build() throws ValidationException {
-            Artist artist = new Artist(name,genre);
+            Artist artist = new Artist(name, genre);
 
             validateArtist(artist);
             return artist;
         }
 
-        public Artist validateArtist(Artist artist){
+        public Artist validateArtist(Artist artist) {
             Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
             Set<ConstraintViolation<Artist>> constraintViolations = validator.validate(artist);
             String fieldName = "";
@@ -118,7 +117,7 @@ public class Artist  {
                 fieldName += constraintViolation.getPropertyPath().toString().toUpperCase();
             }
 
-            if(fieldName.length()>0) throw  new javax.validation.ValidationException();
+            if (fieldName.length() > 0) throw new javax.validation.ValidationException();
 
             return artist;
         }
