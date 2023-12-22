@@ -37,7 +37,7 @@ public class JsonSerializer implements Serializer {
         }
     }
 
-    public void saveToFile(Object entity, String filePath) {
+    public void saveToFile(Artist entity, String filePath) {
         try {
             // Перевірка, чи entity є типом Artist
             if (entity instanceof Artist) {
@@ -50,14 +50,9 @@ public class JsonSerializer implements Serializer {
         }
     }
 
-    public Object loadFromFile(String filePath, Object entity) {
+    public Artist loadFromFile(String filePath) {
         try {
-            // Перевірка, чи entity є типом Artist
-            if (entity instanceof Artist) {
-                return objectMapper.readValue(new File(filePath), entity.getClass());
-            } else {
-                throw new IllegalArgumentException("Unsupported type for loading from file: " + entity.getClass());
-            }
+            return objectMapper.readValue(new File(filePath), Artist.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

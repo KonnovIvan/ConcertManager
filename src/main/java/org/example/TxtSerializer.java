@@ -24,6 +24,8 @@ public class TxtSerializer implements Serializer {
         }
     }
 
+
+    @Override
     public void saveToFile(Artist artist, String filePath) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             writer.println(serialize(artist));
@@ -31,7 +33,7 @@ public class TxtSerializer implements Serializer {
             e.printStackTrace();
         }
     }
-
+    @Override
     public Artist loadFromFile(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String data = reader.readLine();

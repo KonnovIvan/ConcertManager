@@ -13,6 +13,7 @@ class ConcertManager {
     private List<Concert> concerts;
     private List<Artist> artists;
     private List<Client> clients;
+    private List<Ticket> tickets;
 
     public ConcertManager() {
         this.concerts = new ArrayList<>();
@@ -114,7 +115,6 @@ class ConcertManager {
     }
 
 
-
     //Для заданої структури класів зробити сервісні методи (не менше трьох) для роботи
 // з колекціями відповідних об'єктів.
 //Обов'язково використати інтерфейси Comparable та Comparator.
@@ -142,14 +142,15 @@ class ConcertManager {
 
             for (Artist artist : concert.getArtists()) {
                 if (artist.getGenre().equalsIgnoreCase(genre)) {
-                    hasMatchingGenre = true;
+   //                 hasMatchingGenre = true;
+                    filteredConcerts.add(concert);
                     break;
                 }
             }
 
-            if (hasMatchingGenre) {
-                filteredConcerts.add(concert);
-            }
+//            if (hasMatchingGenre) {
+//                filteredConcerts.add(concert);
+//            }
         }
 
         return filteredConcerts;
